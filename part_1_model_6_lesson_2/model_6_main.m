@@ -1,31 +1,43 @@
 clear;
 clc;
-clf;
-
 %%
-x_ref = [0:0.1:60];%ÕıÏÒ²Î¿¼Â·¾¶
+x_ref = [0:0.1:60];%æ­£å¼¦å‚è€ƒè·¯å¾„
 y_ref = 2 * sin(x_ref / pi);
 [~,r] = size(y_ref);
-L = 2;%Öá¾à
-v = 5;%³µËÙ
-k = 0.5;%Ô¤ÃéÏµÊı
-t = 0.1;%Ê±¼ä¼ä¸ô
-ld = k * v;%Ô¤Ãé¾àÀë
+L = 2;%è½´è·
+v = 5;%è½¦é€Ÿ
+k = 0.5;%é¢„ç„ç³»æ•°
+t = 0.1;%æ—¶é—´é—´éš”
+ld = k * v;%é¢„ç„è·ç¦»
 x = 0;
 y = 0;
 p = 0;
-res = zeros(2,3);%´¢´æ½á¹û
+res = zeros(2,3);%å‚¨å­˜ç»“æœ
 for i = 1:r
-    [k,alpha] = find_pos(x_ref,y_ref,x,y,ld,p);%ÕÒÔ¤ÃéµãÎ»ÖÃºÍº½Ïò½ÇÎó²î
-    delta = atan(2 * L *sin(alpha) / ld);%¸üĞÂ×ªÏò½Ç
-    [x,y,p] = update_s(x,y,p,delta,v,t,L);%¸üĞÂ×´Ì¬
+    [k,alpha] = find_pos(x_ref,y_ref,x,y,ld,p);%æ‰¾é¢„ç„ç‚¹ä½ç½®å’Œèˆªå‘è§’è¯¯å·®
+    delta = atan(2 * L *sin(alpha) / ld);%æ›´æ–°è½¬å‘è§’
+    [x,y,p] = update_s(x,y,p,delta,v,t,L);%æ›´æ–°çŠ¶æ€
     if x > x_ref(end)
-        break;%³¬³öÂ·¾¶·¶Î§Í£Ö¹
+        break;%è¶…å‡ºè·¯å¾„èŒƒå›´åœæ­¢
     end
     res(i + 1,:) = [x,y,p];
 end
 %%
+figure(1);
+clf;
 plot(x_ref,y_ref);
 hold on;
 plot(res(:,1),res(:,2));
+title('pos');
+legend('ref','act');
+%%
+figure(2);
+clf;
+for i = 1:r-1
+    p_ref(i) = atan((y_ref(i + 1) - y_ref(i)) / (x_ref(i + 1) - x_ref(i)));
+end
+plot(res(:,1),res(:,3));
+hold on;
+plot(x_ref(2:end),p_ref);
+title('phi');
 legend('ref','act');
