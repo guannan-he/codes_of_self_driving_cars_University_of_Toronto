@@ -12,3 +12,4 @@ Slides: https://github.com/qiaoxu123/Self-Driving-Cars
 coursera: https://www.coursera.org/learn/intro-self-driving-cars/home/welcome  
 pure pursuit: https://ww2.mathworks.cn/help/robotics/ug/pure-pursuit-controller.html  
 stanley: https://ww2.mathworks.cn/help/driving/ref/lateralcontrollerstanley.html
+MPC code: https://blog.csdn.net/gophae/article/details/104400314  
