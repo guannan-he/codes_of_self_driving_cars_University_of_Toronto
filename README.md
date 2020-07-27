@@ -6,7 +6,7 @@ Coursera Open Courses from University of Toronto
 - part 1 model 6 lesson 3 codes available on jul 24 2020: stanley  
 - part 1 model 6 lesson 4 codes available on jul 24 2020: MPC  
 However, this code may malfunction then prediction horizon length is set less than 20.  
-MPC code fixed on jul 27 2020. MPClink in reference colum have issues on constrains, fixed.  
+MPC code fixed on jul 27 2020. MPC link in reference colum have issues on constrains, fixed.  
 
 
 # references
