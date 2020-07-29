@@ -82,7 +82,7 @@ while index < r
     plot(x_act(1),x_act(2),'r*');
     hold on;
     % 矩阵生成↓↓↓
-    [At,Bt] = matrix_gen(x_act,dt,v,delta,l,Ct,np,nc);
+    [At,Bt] = matrix_gen(x_act,dt,control_act,l,Ct,np,nc);
     % 求当前点偏差↓↓↓
     [x_d,lateral_err,index] = find_state_ref_err(state_ref,x_act);
     if abs(lateral_err) >=2
@@ -100,8 +100,6 @@ while index < r
     % 求最优控制量↓↓↓
     delta_des = atan(state_ref(4,index) * l);%该点处期望转向角
     control_act = [target_v;delta_des] + control_d + [U_out(1);U_out(2)];%用得到的控制偏差和上一步的控制偏差修正
-    v = control_act(1);
-    delta = control_act(2);
     control = [control,control_act];%储存
     control_d = [U_out(1);U_out(2)];%更新当前的控制偏差
     % 更新并储存状态↓↓↓
@@ -114,8 +112,10 @@ fprintf('用时%f秒，走%d步\n',t,index);
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%调用子函数%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 线性化矩阵生成（预测模型）
-function [At,Bt] = matrix_gen(xt,t,v,delta,l,Ct,np,nc)
+function [At,Bt] = matrix_gen(xt,t,control_act,l,Ct,np,nc)
 theta = xt(3);
+v = control_act(1);
+delta = control_act(2);
 %海塞矩阵
 Ar = [1,0,-v * sin(theta) * t
      0,1,v * cos(theta) * t
