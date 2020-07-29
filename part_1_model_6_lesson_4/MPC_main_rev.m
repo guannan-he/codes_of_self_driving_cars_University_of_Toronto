@@ -3,22 +3,22 @@ clc;
 clf;
 hold on;
 
-%% ·ÂÕæ²ÎÊıÉèÖÃ
-dt = 0.1;%Ê±¼ä¼ä¸ô
-np = 20;%Ô¤²â²½³¤
-nc = 10;%¿ØÖÆ²½³¤
-nx = 3;%×´Ì¬Á¿ÊıÄ¿
-nu = 2;%¿ØÖÆÁ¿ÊıÄ¿
+%% ä»¿çœŸå‚æ•°è®¾ç½®
+dt = 0.1;%æ—¶é—´é—´éš”
+np = 20;%é¢„æµ‹æ­¥é•¿
+nc = 10;%æ§åˆ¶æ­¥é•¿
+nx = 3;%çŠ¶æ€é‡æ•°ç›®
+nu = 2;%æ§åˆ¶é‡æ•°ç›®
 
-%% ²Î¿¼Â·¾¶ÉèÖÃ
+%% å‚è€ƒè·¯å¾„è®¾ç½®
 t_ref = [0:dt:10];
 [~,r] = size(t_ref);
-x_ref = 10 * t_ref;%xÂ·¾¶
-y_ref = 2 * sin(2 * t_ref * pi / t_ref(end));%yÂ·¾¶
-phi_ref = zeros(1,r);%º½Ïò½Ç
-k_ref = zeros(1,r);%²Î¿¼ÇúÂÊ
-diff_1 = zeros(1,r);%Ò»½×µ¼Êı
-diff_2 = zeros(1,r);%¶ş½×µ¼Êı
+x_ref = 10 * t_ref;%xè·¯å¾„
+y_ref = 2 * sin(2 * t_ref * pi / t_ref(end));%yè·¯å¾„
+phi_ref = zeros(1,r);%èˆªå‘è§’
+k_ref = zeros(1,r);%å‚è€ƒæ›²ç‡
+diff_1 = zeros(1,r);%ä¸€é˜¶å¯¼æ•°
+diff_2 = zeros(1,r);%äºŒé˜¶å¯¼æ•°
 for i = 1:r - 1
     diff_1(i) = (y_ref(i + 1) - y_ref(i)) / (x_ref(i + 1) - x_ref(i));
 end
@@ -32,33 +32,33 @@ phi_ref = atan(diff_1);
 for i = 1:r
     k_ref(i) = diff_2(i) / (1 + diff_1(i)^2)^(1.5);
 end
-state_ref = [x_ref;y_ref;phi_ref;k_ref];%×îÖÕ²Î¿¼¹ì¼£
+state_ref = [x_ref;y_ref;phi_ref;k_ref];%æœ€ç»ˆå‚è€ƒè½¨è¿¹
 clear x_ref y_ref phi_ref k_ref t_ref diff_1 diff_2;
-%% ÎïÀíÏŞÖÆÉèÖÃ
+%% ç‰©ç†é™åˆ¶è®¾ç½®
 u_max = [10;0.5];
 u_min = [2;-0.5];
 du_max = [0.2;0.2];
 du_min = [-0.2;-0.2];
 
-%% ³µÁ¾²ÎÊı¼°×´Ì¬ÉèÖÃ
-l = 2;%Öá¾à
-target_v = 5;%ÆÚÍûËÙ¶È
-delta = 0;%µ±Ç°×ªÏò½Ç
-v = 5;%µ±Ç°³µÉíËÙ¶È
-control_d = [0;0];%ÉÏÒ»Ê±¿Ì¿ØÖÆÆ«²î
-control_act = [target_v;delta];%µ±Ç°Êµ¼Ê¿ØÖÆÖµ
-control = [control_act];%´¢´æÊµ¼Ê¿ØÖÆÖ¸Áî
-x_d = [0;0;0];%µ±Ç°×´Ì¬Æ«²î
-x_act = [0;0;0];%µ±Ç°Êµ¼Ê×´Ì¬
-x_res = [x_act];%´¢´æÊµ¼Ê×´Ì¬
+%% è½¦è¾†å‚æ•°åŠçŠ¶æ€è®¾ç½®
+l = 2;%è½´è·
+target_v = 5;%æœŸæœ›é€Ÿåº¦
+delta = 0;%å½“å‰è½¬å‘è§’
+v = 5;%å½“å‰è½¦èº«é€Ÿåº¦
+control_d = [0;0];%ä¸Šä¸€æ—¶åˆ»æ§åˆ¶åå·®
+control_act = [target_v;delta];%å½“å‰å®é™…æ§åˆ¶å€¼
+control = [control_act];%å‚¨å­˜å®é™…æ§åˆ¶æŒ‡ä»¤
+x_d = [0;0;0];%å½“å‰çŠ¶æ€åå·®
+x_act = [0;0;0];%å½“å‰å®é™…çŠ¶æ€
+x_res = [x_act];%å‚¨å­˜å®é™…çŠ¶æ€
 
-%% È¨ÖØ¾ØÕó¼°¹Û²â¾ØÕóÉú³É
-Q = eye(nx);%×´Ì¬±äÁ¿È¨ÖØ
-R = eye(nu);%¿ØÖÆ±äÁ¿È¨ÖØ
-rou = 100;%ËÉ³ÚÒò×Ó
+%% æƒé‡çŸ©é˜µåŠè§‚æµ‹çŸ©é˜µç”Ÿæˆ
+Q = eye(nx);%çŠ¶æ€å˜é‡æƒé‡
+R = eye(nu);%æ§åˆ¶å˜é‡æƒé‡
+rou = 100;%æ¾å¼›å› å­
 Qt = [Q];
 Rt = [R];
-%¹Û²ì¾ØÕó
+%è§‚å¯ŸçŸ©é˜µ
 c = [1,0,0,0,0
      0,1,0,0,0
      0,0,1,0,0];
@@ -72,7 +72,7 @@ for i = 1:nc - 1
 end
 clear c R Q;
 
-%% MPCÖ÷Ñ­»·
+%% MPCä¸»å¾ªç¯
 figure(1);
 clf;
 plot(state_ref(1,:),state_ref(2,:));
@@ -81,53 +81,55 @@ tic;
 while index < r
     plot(x_act(1),x_act(2),'r*');
     hold on;
-    % ¾ØÕóÉú³É¡ı¡ı¡ı
+    % çŸ©é˜µç”Ÿæˆâ†“â†“â†“
     [At,Bt] = matrix_gen(x_act,dt,v,delta,l,Ct,np,nc);
-    % Çóµ±Ç°µãÆ«²î¡ı¡ı¡ı
+    % æ±‚å½“å‰ç‚¹åå·®â†“â†“â†“
     [x_d,lateral_err,index] = find_state_ref_err(state_ref,x_act);
     if abs(lateral_err) >=2
-        fprintf('ºáÏòÆ«²î¹ı´ó\n');
+        fprintf('æ¨ªå‘åå·®è¿‡å¤§\n');
         break;
     end
-    % Çóµ±Ç°Ô¼Êø¡ı¡ı¡ı
+    % æ±‚å½“å‰çº¦æŸâ†“â†“â†“
     [A_eqst,b_eqst,A_ieqst,b_ieqst,lb,ub] = get_constrains(u_max,u_min,du_max,du_min,control_act,nc,nu);
-    % Çó×îÓÅ¿ØÖÆÁ¿Æ«²î¡ı¡ı¡ı
+    % æ±‚æœ€ä¼˜æ§åˆ¶é‡åå·®â†“â†“â†“
     yita = [x_d;control_d];
     H = [Bt' * Qt * Bt + Rt,zeros(size(Bt,2),1);zeros(1,size(Bt,2)),rou];
-    H = H + H';%quadprog³ÌĞòÊÇÇó1/2H£¬¹Ê½«Æä±äÎª¶ş±¶
-    F = [2 * yita' * At' * Qt * Bt,0]';%×îºóÒ»¸ö¶ÔÓ¦ËÉ³Ú±äÁ¿
+    H = H + H';%quadprogç¨‹åºæ˜¯æ±‚1/2Hï¼Œæ•…å°†å…¶å˜ä¸ºäºŒå€
+    F = [2 * yita' * At' * Qt * Bt,0]';%æœ€åä¸€ä¸ªå¯¹åº”æ¾å¼›å˜é‡
     U_out = quadprog(H,F,A_ieqst,b_ieqst,A_eqst,b_eqst,lb,ub);
-    % Çó×îÓÅ¿ØÖÆÁ¿¡ı¡ı¡ı
-    delta_des = atan(state_ref(4,index) * l);%¸Ãµã´¦ÆÚÍû×ªÏò½Ç
-    control_act = [target_v;delta_des] + control_d + [U_out(1);U_out(2)];%ÓÃµÃµ½µÄ¿ØÖÆÆ«²îºÍÉÏÒ»²½µÄ¿ØÖÆÆ«²îĞŞÕı
-    control = [control,control_act];%´¢´æ
-    control_d = [U_out(1);U_out(2)];%¸üĞÂµ±Ç°µÄ¿ØÖÆÆ«²î
-    % ¸üĞÂ²¢´¢´æ×´Ì¬¡ı¡ı¡ı
+    % æ±‚æœ€ä¼˜æ§åˆ¶é‡â†“â†“â†“
+    delta_des = atan(state_ref(4,index) * l);%è¯¥ç‚¹å¤„æœŸæœ›è½¬å‘è§’
+    control_act = [target_v;delta_des] + control_d + [U_out(1);U_out(2)];%ç”¨å¾—åˆ°çš„æ§åˆ¶åå·®å’Œä¸Šä¸€æ­¥çš„æ§åˆ¶åå·®ä¿®æ­£
+    v = control_act(1);
+    delta = control_act(2);
+    control = [control,control_act];%å‚¨å­˜
+    control_d = [U_out(1);U_out(2)];%æ›´æ–°å½“å‰çš„æ§åˆ¶åå·®
+    % æ›´æ–°å¹¶å‚¨å­˜çŠ¶æ€â†“â†“â†“
     x_act = update_state(x_act,control_act,dt,l);
-    x_res = [x_res,x_act];%´¢´æ
+    x_res = [x_res,x_act];%å‚¨å­˜
 end
 t = toc;
 clc;
-fprintf('ÓÃÊ±%fÃë£¬×ß%d²½\n',t,index);
+fprintf('ç”¨æ—¶%fç§’ï¼Œèµ°%dæ­¥\n',t,index);
 %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%µ÷ÓÃ×Óº¯Êı%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ÏßĞÔ»¯¾ØÕóÉú³É£¨Ô¤²âÄ£ĞÍ£©
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%è°ƒç”¨å­å‡½æ•°%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% çº¿æ€§åŒ–çŸ©é˜µç”Ÿæˆï¼ˆé¢„æµ‹æ¨¡å‹ï¼‰
 function [At,Bt] = matrix_gen(xt,t,v,delta,l,Ct,np,nc)
 theta = xt(3);
-%º£Èû¾ØÕó
+%æµ·å¡çŸ©é˜µ
 Ar = [1,0,-v * sin(theta) * t
      0,1,v * cos(theta) * t
      0,0,1];
 Br = [t * cos(theta),0
      t * sin(theta),0
      t * tan(delta) / l,(v * t) / (l * cos(delta)^2)];
-%½«¿ØÖÆ±äÁ¿°üº¬½øÀ´£¬Ïê¼û¡¶ÎŞÈË¼İÊ»³µÁ¾Ä£ĞÍÔ¤²â¿ØÖÆ¡·µÚÈıÕÂ
+%å°†æ§åˆ¶å˜é‡åŒ…å«è¿›æ¥ï¼Œè¯¦è§ã€Šæ— äººé©¾é©¶è½¦è¾†æ¨¡å‹é¢„æµ‹æ§åˆ¶ã€‹ç¬¬ä¸‰ç« 
 A = [Ar,Br;zeros(size(Br,2),size(Ar,2)),eye(size(Br,2))];
 B = [Br;eye(size(Br,2))];
 At = [A];
 Bt = [B];
 temp = [B];
-%¼ÆËã¿ØÖÆĞòÁĞ¾ØÕó
+%è®¡ç®—æ§åˆ¶åºåˆ—çŸ©é˜µ
 for j = 1:np - 1
     At = [A;At * A];
     temp = [A * temp,B];
@@ -137,16 +139,16 @@ At = Ct * At;
 Bt = Ct * Bt(:,1:2 * nc);
 end
 
-%% ÕÒ²Î¿¼µã¼°Îó²î
-%¶ÔÆ½ÃæÄÚÀëÉ¢×ø±êµãÕÒ²Î¿¼
+%% æ‰¾å‚è€ƒç‚¹åŠè¯¯å·®
+%å¯¹å¹³é¢å†…ç¦»æ•£åæ ‡ç‚¹æ‰¾å‚è€ƒ
 function [state_ref_err,lateral_err,index] = find_state_ref_err(state_ref,current_state)
 [~,r] = size(state_ref);
 distance = zeros(1,r);
-for i = 1:r%ÕÒ¾àÀë×î½üµÄµã
+for i = 1:r%æ‰¾è·ç¦»æœ€è¿‘çš„ç‚¹
     distance(i) = (current_state(1) - state_ref(1,i))^2 + (current_state(2) - state_ref(2,i))^2;
 end
 [val,index] = min(distance);
-if state_ref(2,index) > current_state(2)%ºáÏòÎó²îÉÏ£¨×ó£©ÕıÏÂ£¨ÓÒ£©¸º
+if state_ref(2,index) > current_state(2)%æ¨ªå‘è¯¯å·®ä¸Šï¼ˆå·¦ï¼‰æ­£ä¸‹ï¼ˆå³ï¼‰è´Ÿ
     lateral_err = -val;
 else
     lateral_err = val;
@@ -154,8 +156,8 @@ end
 state_ref_err = current_state - state_ref(1:3,index);
 end
 
-%% ¸üĞÂ³µÁ¾Êµ¼Ê×´Ì¬(¿ØÖÆÄ£ĞÍ)
-%Ö»ÊÇ×î¼òµ¥µÄ¸üĞÂ·½Ê½£¬¿ÉÒÔ»»³ÉÆäËûµÄ
+%% æ›´æ–°è½¦è¾†å®é™…çŠ¶æ€(æ§åˆ¶æ¨¡å‹)
+%åªæ˜¯æœ€ç®€å•çš„æ›´æ–°æ–¹å¼ï¼Œå¯ä»¥æ¢æˆå…¶ä»–çš„
 function [x_act] = update_state(x_now,control,t,l)
 x_act = zeros(3,1);
 x_act(1) = x_now(1) + control(1) * cos(x_now(3)) * t;
@@ -163,22 +165,22 @@ x_act(2) = x_now(2) + control(1) * sin(x_now(3)) * t;
 x_act(3) = x_now(3) + control(1) * tan(control(2)) / l * t;
 end
 
-%% Éú³Éµ±Ç°µãÔ¼Êø
-%¸ù¾İµ±Ç°Êµ¼Ê¿ØÖÆÁ¿Éú³ÉÔ¼Êø
+%% ç”Ÿæˆå½“å‰ç‚¹çº¦æŸ
+%æ ¹æ®å½“å‰å®é™…æ§åˆ¶é‡ç”Ÿæˆçº¦æŸ
 function [A_eqst,b_eqst,A_ieqst,b_ieqst,lb,ub] = get_constrains(u_max,u_min,du_max,du_min,control_act,nc,nu)
-A_eqst = [];%µÈÊ½Ô¼ÊøA
-b_eqst = [];%µÈÊ½Ô¼Êøb
+A_eqst = [];%ç­‰å¼çº¦æŸA
+b_eqst = [];%ç­‰å¼çº¦æŸb
 A_base = tril(ones(nc));
-A_ieqst = [kron(A_base,eye(nu)),zeros(nc * nu,1)];%×îºóÒ»ÁĞÊÇºöÂÔËÉ³Ú±äÁ¿
-A_ieqst = [A_ieqst;-1 * A_ieqst];%²»µÈÊ½Ô¼ÊøA
+A_ieqst = [kron(A_base,eye(nu)),zeros(nc * nu,1)];%æœ€åä¸€åˆ—æ˜¯å¿½ç•¥æ¾å¼›å˜é‡
+A_ieqst = [A_ieqst;-1 * A_ieqst];%ä¸ç­‰å¼çº¦æŸA
 b_base = ones(nc,1);
 Umax = kron(b_base,u_max);
 Umin = kron(b_base,u_min);
 Ut = kron(b_base,control_act);
-b_ieqst = [Umax - Ut;Ut - Umin];%²»µÈÊ½Ô¼Êøb£¬¿ØÖÆ±äÁ¿²îÖ®ºÍµÄ¸»ÓàÁ¿
-M = 10;%ËÉ³Ú±äÁ¿ÏŞÖÆ
+b_ieqst = [Umax - Ut;Ut - Umin];%ä¸ç­‰å¼çº¦æŸbï¼Œæ§åˆ¶å˜é‡å·®ä¹‹å’Œçš„å¯Œä½™é‡
+M = 10;%æ¾å¼›å˜é‡é™åˆ¶
 DU_max = kron(b_base,du_max);
 DU_min = kron(b_base,du_min);
-lb = [DU_min;0];%¿ØÖÆ±äÁ¿²îÉÏÏÂ½ç
+lb = [DU_min;0];%æ§åˆ¶å˜é‡å·®ä¸Šä¸‹ç•Œ
 ub = [DU_max;M];
 end
